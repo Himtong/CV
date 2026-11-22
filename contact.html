@@ -37,12 +37,12 @@
           <div class="terminal-status"><span></span> Trạng thái kết nối: sẵn sàng</div>
         </div>
         <div class="contact-links">
-          <a class="contact-item" href="mailto:caogiakhung@gmail.com">
+          <a class="contact-item" href="mailto:vutrongtranhieu@gmail.com">
             <span class="contact-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d="M3 5h18v14H3V5Zm2 2 7 5 7-5H5Zm14 10V9l-7 5-7-5v8h14Z"/></svg>
             </span>
             <span>Thư điện tử</span>
-            <strong class="contact-email">caogiakhung@gmail.com</strong>
+            <strong class="contact-email">vutrongtranhieu@gmail.com</strong>
           </a>
           <a class="contact-item" href="tel:+84392273791">
             <span class="contact-icon" aria-hidden="true">
@@ -67,8 +67,12 @@
           </a>
         </div>
       </div>
-      <form class="contact-form reveal" id="contactForm">
+      <form class="contact-form reveal" id="contactForm" action="https://formsubmit.co/vutrongtranhieu@gmail.com" method="POST">
         <div class="form-heading"><p class="eyebrow">Gửi thông điệp</p><span>BIỂU MẪU / 001</span></div>
+        <input type="hidden" name="_subject" value="Tin nhan moi tu Portfolio">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_replyto" id="contact-replyto">
         <label for="contact-name">Tên của bạn
           <input id="contact-name" type="text" name="name" required minlength="2" maxlength="100" autocomplete="name">
         </label>
@@ -97,8 +101,6 @@
     </nav>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@5/dist/email.min.js" defer></script>
-  <script src="email-config.js" defer></script>
   <script src="script.js" defer></script>
 </body>
 </html>

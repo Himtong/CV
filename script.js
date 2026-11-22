@@ -189,7 +189,6 @@ const contactForm = document.getElementById("contactForm");
 if (contactForm) {
   const formStatus = document.getElementById("formStatus");
   const submitButton = contactForm.querySelector('button[type="submit"]');
-  let initializedPublicKey = "";
 
   const setFormStatus = (message, state) => {
     if (!formStatus) {
@@ -222,19 +221,13 @@ if (contactForm) {
       return;
     }
 
+    const replyToField = contactForm.elements.namedItem("_replyto");
+    if (replyToField) {
+      replyToField.value = emailField.value;
+    }
+
     if (honeypot.value.trim()) {
       setFormStatus("Không thể xử lý yêu cầu. Vui lòng thử lại.", "error");
-      return;
-    }
-
-    const config = window.PORTFOLIO_EMAIL_CONFIG;
-    if (!config || !config.publicKey || !config.serviceId || !config.templateId) {
-      setFormStatus("Form chưa được cấu hình. Vui lòng liên hệ qua email bên cạnh.", "error");
-      return;
-    }
-
-    if (!window.emailjs) {
-      setFormStatus("Dịch vụ gửi email chưa tải được. Vui lòng thử lại sau.", "error");
       return;
     }
 
@@ -248,17 +241,28 @@ if (contactForm) {
     setFormStatus("Đang gửi thông tin...", "pending");
 
     try {
-      if (initializedPublicKey !== config.publicKey) {
-        window.emailjs.init({ publicKey: config.publicKey });
-        initializedPublicKey = config.publicKey;
+      const response = await fetch("https://formsubmit.co/ajax/vutrongtranhieu@gmail.com", {
+        method: "POST",
+        body: new FormData(contactForm),
+        headers: {
+          Accept: "application/json"
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`FormSubmit returned ${response.status}`);
       }
 
-      await window.emailjs.sendForm(config.serviceId, config.templateId, contactForm);
+      const result = await response.json();
+      if (!result.success) {
+        throw new Error("FormSubmit rejected the submission");
+      }
+
       contactForm.reset();
       setFormStatus("Gửi thành công. Cảm ơn bạn đã liên hệ!", "success");
     } catch (error) {
-      console.error("EmailJS send failed.", error);
-      setFormStatus("Gửi chưa thành công. Vui lòng thử lại hoặc liên hệ qua email.", "error");
+      console.error("FormSubmit send failed.", error);
+      setFormStatus("Gửi chưa thành công. Vui lòng thử lại hoặc gửi trực tiếp tới vutrongtranhieu@gmail.com.", "error");
     } finally {
       delete contactForm.dataset.sending;
       contactForm.removeAttribute("aria-busy");
